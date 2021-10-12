@@ -1,9 +1,9 @@
 package main
 
 import (
-	"DoriansProyect/products/delete"
-	"DoriansProyect/products/get"
-	"DoriansProyect/products/post"
+	"APIRest-Golang-MongoDB/products/delete"
+	"APIRest-Golang-MongoDB/products/get"
+	"APIRest-Golang-MongoDB/products/post"
 	"log"
 	"net/http"
 
@@ -17,7 +17,7 @@ func main() {
 func serveWeb() {
 	router := mux.NewRouter()
 
-	//Endpoints
+	//Endpointsgo get -v -u github.com/gorilla/mux
 	router.HandleFunc("/product/{name}", get.GetProductByName).Methods("GET")
 	router.HandleFunc("/product", get.GetProducts).Queries("Limit", "{[0-9]*?}").Methods("GET")
 	router.HandleFunc("/product", post.CreateProduct).Methods("POST")

@@ -1,7 +1,7 @@
 package get
 
 import (
-	"DoriansProyect/models"
+	"APIRest-Golang-MongoDB/models"
 	"context"
 	"encoding/json"
 	"fmt"
