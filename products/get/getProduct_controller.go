@@ -43,12 +43,12 @@ func GetProductByName(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err.Error())
 		fmt.Println("enter error")
 	}
+	w.Header().Set("Content-Type", "application/json")
 	if product.Name != "" {
 		w.WriteHeader(http.StatusOK)
 	} else {
 		w.WriteHeader(http.StatusPartialContent)
 	}
-	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(product)
 
 }

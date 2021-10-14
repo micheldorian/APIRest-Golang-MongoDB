@@ -43,16 +43,15 @@ func GetProducts(w http.ResponseWriter, req *http.Request) {
 
 	var products []*models.Product
 
+	w.Header().Set("Content-Type", "application/json")
 	if cur.RemainingBatchLength() == 0 {
 		w.WriteHeader(http.StatusPartialContent)
 	} else {
-
 		w.WriteHeader(http.StatusOK)
+
 	}
-	w.Header().Set("Content-Type", "application/json")
 
 	for cur.Next(context.TODO()) {
-
 		// create a value into which the single document can be decoded
 		var s models.Product
 		err := cur.Decode(&s)
@@ -60,7 +59,6 @@ func GetProducts(w http.ResponseWriter, req *http.Request) {
 			log.Fatal(err)
 			log.Fatal("Cur del next")
 		}
-
 		products = append(products, &s)
 	}
 
@@ -71,5 +69,10 @@ func GetProducts(w http.ResponseWriter, req *http.Request) {
 
 	cur.Close(context.TODO())
 	json.NewEncoder(w).Encode(products)
+	defer func() {
+		if err = client.Disconnect(ctx); err != nil {
+			panic(err)
+		}
+	}()
 
 }
