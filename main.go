@@ -24,4 +24,5 @@ func serveWeb() {
 	router.HandleFunc("/product", delete.DeleteProductByName).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
+
 }

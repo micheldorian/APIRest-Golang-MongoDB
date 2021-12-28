@@ -1,37 +1,22 @@
 package get
 
 import (
+	"APIRest-Golang-MongoDB/database"
 	"APIRest-Golang-MongoDB/models"
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func GetProducts(w http.ResponseWriter, req *http.Request) {
 
-	fmt.Println("Connecting!")
+	collection := database.ClientMongoDB().Database("DoriansProjectDB").Collection("products")
 
-	clientOptions := options.Client().
-		ApplyURI("mongodb+srv://UGV2Udu4shHqbzkQ:UGV2Udu4shHqbzkQ@doriansproyect.2zla2.mongodb.net/DoriansProyect?retryWrites=true&w=majority")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client, err := mongo.Connect(ctx, clientOptions)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Congratulations, you're already connected to MongoDB!")
-
-	fmt.Println("collection")
-	collection := client.Database("DoriansProjectDB").Collection("products")
 	limitString := req.URL.Query().Get("Limit")
 	limit, err := strconv.ParseInt(limitString, 0, 64)
 	findOpts := options.Find()
@@ -69,10 +54,4 @@ func GetProducts(w http.ResponseWriter, req *http.Request) {
 
 	cur.Close(context.TODO())
 	json.NewEncoder(w).Encode(products)
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
-		}
-	}()
-
 }
